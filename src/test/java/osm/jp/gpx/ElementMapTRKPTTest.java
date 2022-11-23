@@ -275,9 +275,9 @@ public class ElementMapTRKPTTest {
             String dateTimeOriginal = "2017:06:30 09:59:59";
             Date time = ImportPicture.toEXIFDate(dateTimeOriginal);
             assertThat(ImportPicture.toEXIFString(time), is("2017:06:30 09:59:59"));
-            assertThat(ImportPicture.toUTCString(time), is("2017-06-30T00:59:59Z"));
+            assertThat(ImportPicture.toUTCString(time), is("2017-06-30T00:59:59.000Z"));
             DateFormat dfUTC = new SimpleDateFormat(ImportPicture.TIME_FORMAT_STRING);
-            assertThat(dfUTC.format(time), is("2017-06-30T09:59:59Z"));
+            assertThat(dfUTC.format(time), is("2017-06-30T09:59:59.000Z"));
         }
     }
 }

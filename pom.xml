@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>osm.surveyor</groupId>
   <artifactId>adjustgpx-core</artifactId>
-  <version>5.3.16-SNAPSHOT</version>
+  <version>5.3.16</version>
   
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -21,17 +21,6 @@
   </properties>
   
   <pluginRepositories>
-    <pluginRepository>
-      <id>sonatype-public-repository</id>
-      <url>https://oss.sonatype.org/content/groups/public</url>
-      <snapshots>
-        <enabled>true</enabled>
-      </snapshots>
-      <releases>
-        <enabled>true</enabled>
-      </releases>
-    </pluginRepository>
-    
     <pluginRepository>
       <id>com.googlecode.maven-download-plugin</id>
       <url>https://mvnrepository.com/artifact</url>
@@ -53,13 +42,6 @@
       <type>jar</type>
     </dependency>
          
-    <!-- https://mvnrepository.com/artifact/org.geotools/gt-main -->
-    <dependency>
-      <groupId>org.geotools</groupId>
-      <artifactId>gt-main</artifactId>
-      <version>25.1</version>
-    </dependency>
-
     <!-- https://mvnrepository.com/artifact/com.googlecode.maven-download-plugin/download-maven-plugin -->
     <dependency>
       <groupId>com.googlecode.maven-download-plugin</groupId>
@@ -96,14 +78,6 @@
       <artifactId>commons-compress</artifactId>
       <version>1.14</version>
       <scope>test</scope>
-      <type>jar</type>
-    </dependency>
-    
-    <!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-release-plugin -->
-    <dependency>
-      <groupId>org.apache.maven.plugins</groupId>
-      <artifactId>maven-release-plugin</artifactId>
-      <version>2.5.3</version>
       <type>jar</type>
     </dependency>
     
@@ -152,7 +126,7 @@
               <goal>wget</goal>
             </goals>
             <configuration>
-              <url>http://surveyor.mydns.jp/archiva/repository/haya4/adjustgpx-data/Sony20170518/5/Sony20170518-5.tar.gz</url>
+              <url>https://github.com/yuuhayashi/adjustgpx-core/releases/download/v5.3.15/Sony20170518-5.tar.gz</url>
               <unpack>false</unpack>
               <outputDirectory>${project.build.directory}/test-classes/imgdata</outputDirectory>
             </configuration>
@@ -164,7 +138,7 @@
               <goal>wget</goal>
             </goals>
             <configuration>
-              <url>http://surveyor.mydns.jp/archiva/repository/haya4/adjustgpx-data/WiMiUS20170518/5/WiMiUS20170518-5.tar.gz</url>
+              <url>https://github.com/yuuhayashi/adjustgpx-core/releases/download/v5.3.15/WiMiUS20170518-5.tar.gz</url>
               <unpack>false</unpack>
               <outputDirectory>${project.build.directory}/test-classes/imgdata</outputDirectory>
             </configuration>
@@ -176,7 +150,7 @@
               <goal>wget</goal>
             </goals>
             <configuration>
-              <url>http://surveyor.mydns.jp/archiva/repository/haya4/adjustgpx-data/separate/5/separate-5.tar.gz</url>
+              <url>https://github.com/yuuhayashi/adjustgpx-core/releases/download/v5.3.15/separate-5.tar.gz</url>
               <unpack>false</unpack>
               <outputDirectory>${project.build.directory}/test-classes/imgdata</outputDirectory>
             </configuration>
@@ -193,18 +167,6 @@
           <junitArtifactName>junit:junit</junitArtifactName>
           <encoding>UTF-8</encoding>
           <argLine>-Dfile.encoding=UTF-8</argLine>
-        </configuration>
-      </plugin>
-      
-      <!-- mvn release:prepare -->
-      <!-- mvn release:perform -Dmaven.javadoc.skip -->
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-release-plugin</artifactId>
-        <version>2.5.3</version>
-        <configuration>
-          <releaseProfiles>install</releaseProfiles>
-          <tagNameFormat>v@{project.version}</tagNameFormat>
         </configuration>
       </plugin>
     </plugins>
