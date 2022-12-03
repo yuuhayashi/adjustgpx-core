@@ -55,11 +55,30 @@ public class ImgFolder extends ArrayList<ImgFile> {
      * @throws TransformerException 
      */
     void procGPXfile(GpxFile gpxFile, long delta) throws ParserConfigurationException, SAXException, IOException, ParseException, ImageReadException, ImageWriteException, TransformerException {
+    	ImgFile pre = null;
         for (ImgFile image : this) {
         	try {
         		if (!image.isDone()) {
                     if(image.procImageFile(params, delta, gpxFile, outDir.toFile())) {
                     	image.setDone(true);
+                    	if (pre == null) {
+                    		pre = image;
+                    	}
+                    	else {
+                    		double simplify = params.getSimplifyMeters();
+                    		if (simplify > 0) {
+                    			GeoPoint prepoint = pre.getPoint();
+                    			if (prepoint.getDistance(image.getPoint()) < simplify) {
+                    				image.setEnable(false);
+                    			}
+                    			else {
+                    				pre = image;
+                    			}
+                    		}
+                    		else {
+                    			pre = image;
+                    		}
+                    	}
                     }
         		}
         	}

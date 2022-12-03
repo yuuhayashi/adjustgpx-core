@@ -75,8 +75,8 @@ Source repository
 
 | name           | url                                                      |
 | -------------- | -------------------------------------------------------- |
-| adjustgpx-core | http://surveyor.mydns.jp/gitbucket/git/yuu/adjustgpx-core.git |
-| osdn   | yuuhayashi@git.osdn.net:/gitroot/importpicture/importpicture.git |
+| adjustgpx-core | [http://surveyor.mydns.jp/archiva/#artifact~haya4/osm.surveyor/adjustgpx-gui](http://surveyor.mydns.jp/archiva/#artifact~haya4/osm.surveyor/adjustgpx-gui) |
+| osdn   | `yuuhayashi@git.osdn.net:/gitroot/importpicture/importpicture.git` |
 
 Binary repository : `http://surveyor.mydns.jp/archiva/#artifact/osm.surveyor/adjustgpx-core/`
 

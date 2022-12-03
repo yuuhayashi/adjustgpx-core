@@ -1,7 +1,6 @@
 package osm.jp.gpx;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.*;
 import java.text.DateFormat;
@@ -106,6 +105,7 @@ public class ElementMapTRKPTTest {
         public void setUp() throws Exception {
             AppParameters params = new AppParameters(AppParameters.FILE_PATH);
             params.setGpxOverwriteMagvar(true);
+            params.setGpxOutputSpeed(true);
 
             map = new ElementMapTRKPT(params);
             for (int cnt = values.length; cnt > 0; cnt--) {
@@ -155,21 +155,25 @@ public class ElementMapTRKPTTest {
         @Test
         public void get_19() throws ParseException {
             TagTrkpt tag = map.getValue(ImportPicture.toUTCDate("2017-05-29T01:23:19Z"));
-            assertThat(sdf.format(tag.time), is("2017-05-29T10:23:18Z"));
-            assertNull(tag.eleStr);
-            assertThat(tag.lat, is(Double.valueOf(values[0][1])));
-            assertThat(tag.lon, is(Double.valueOf(values[0][2])));
-            assertNull(tag.magvarStr);
+            assertThat(sdf.format(tag.time), is("2017-05-29T10:23:19Z"));
+            assertThat(tag.eleStr, is("614.90"));
+            assertTrue(tag.lat < Double.valueOf(values[0][1]));
+            assertTrue(tag.lat > Double.valueOf(values[1][1]));
+            assertTrue(tag.lon < Double.valueOf(values[0][2]));
+            assertTrue(tag.lon > Double.valueOf(values[1][2]));
+            assertThat(tag.magvarStr, is("193"));
         }
 
         @Test
         public void get_20() throws ParseException {
             TagTrkpt tag = map.getValue(ImportPicture.toUTCDate("2017-05-29T01:23:20Z"));
-            assertThat(sdf.format(tag.time), is("2017-05-29T10:23:18Z"));
-            assertNull(tag.eleStr);
-            assertThat(tag.lat, is(Double.valueOf(values[0][1])));
-            assertThat(tag.lon, is(Double.valueOf(values[0][2])));
-            assertNull(tag.magvarStr);
+            assertThat(sdf.format(tag.time), is("2017-05-29T10:23:20Z"));
+            assertThat(tag.eleStr, is("614.90"));
+            assertTrue(tag.lat < Double.valueOf(values[0][1]));
+            assertTrue(tag.lat > Double.valueOf(values[1][1]));
+            assertTrue(tag.lon < Double.valueOf(values[0][2]));
+            assertTrue(tag.lon > Double.valueOf(values[1][2]));
+            assertThat(tag.magvarStr, is("193"));
         }
 
         @Test
@@ -179,26 +183,30 @@ public class ElementMapTRKPTTest {
             assertThat(tag.eleStr, is("614.90"));
             assertThat(tag.lat, is(Double.valueOf(values[1][1])));
             assertThat(tag.lon, is(Double.valueOf(values[1][2])));
-            assertNotNull(tag.magvarStr);
+            assertNull(tag.magvarStr);
         }
 
         @Test
         public void get_22() throws ParseException {
             TagTrkpt tag = map.getValue(ImportPicture.toUTCDate("2017-05-29T01:23:22Z"));
-            assertThat(sdf.format(tag.time), is("2017-05-29T10:23:21Z"));
-            assertThat(tag.eleStr, is("614.90"));
-            assertThat(tag.lat, is(Double.valueOf(values[1][1])));
-            assertThat(tag.lon, is(Double.valueOf(values[1][2])));
+            assertThat(sdf.format(tag.time), is("2017-05-29T10:23:22Z"));
+            assertThat(tag.eleStr, is("615.00"));
+            assertTrue(tag.lat < Double.valueOf(values[1][1]));
+            assertTrue(tag.lat > Double.valueOf(values[2][1]));
+            assertTrue(tag.lon < Double.valueOf(values[1][2]));
+            assertTrue(tag.lon > Double.valueOf(values[2][2]));
             assertNotNull(tag.magvarStr);
         }
 
         @Test
         public void get_23() throws ParseException {
             TagTrkpt tag = map.getValue(ImportPicture.toUTCDate("2017-05-29T01:23:23Z"));
-            assertThat(sdf.format(tag.time), is("2017-05-29T10:23:21Z"));
-            assertThat(tag.eleStr, is("614.90"));
-            assertThat(tag.lat, is(Double.valueOf(values[1][1])));
-            assertThat(tag.lon, is(Double.valueOf(values[1][2])));
+            assertThat(sdf.format(tag.time), is("2017-05-29T10:23:23Z"));
+            assertThat(tag.eleStr, is("615.00"));
+            assertTrue(tag.lat < Double.valueOf(values[1][1]));
+            assertTrue(tag.lat > Double.valueOf(values[2][1]));
+            assertTrue(tag.lon < Double.valueOf(values[1][2]));
+            assertTrue(tag.lon > Double.valueOf(values[2][2]));
             assertNotNull(tag.magvarStr);
         }
 
@@ -209,27 +217,32 @@ public class ElementMapTRKPTTest {
             assertThat(tag.eleStr, is("615.00"));
             assertThat(tag.lat, is(Double.valueOf(values[2][1])));
             assertThat(tag.lon, is(Double.valueOf(values[2][2])));
-            assertThat(tag.magvarStr, is(notNullValue()));
+            assertEquals("0.0", tag.speedStr);
+            assertNull(tag.magvarStr);
         }
 
         @Test
         public void get_25() throws ParseException {
             TagTrkpt tag = map.getValue(ImportPicture.toUTCDate("2017-05-29T01:23:25Z"));
-            assertThat(sdf.format(tag.time), is("2017-05-29T10:23:24Z"));
-            assertThat(tag.eleStr, is("615.00"));
-            assertThat(tag.lat, is(Double.valueOf(values[2][1])));
-            assertThat(tag.lon, is(Double.valueOf(values[2][2])));
-            assertThat(tag.magvarStr, is(notNullValue()));
+            assertThat(sdf.format(tag.time), is("2017-05-29T10:23:25Z"));
+            assertEquals("615.03", tag.eleStr);
+            assertTrue(tag.lat < Double.valueOf(values[2][1]));
+            assertTrue(tag.lat > Double.valueOf(values[3][1]));
+            assertTrue(tag.lon < Double.valueOf(values[2][2]));
+            assertTrue(tag.lon > Double.valueOf(values[3][2]));
+            assertNotNull(tag.magvarStr);
         }
 
         @Test
         public void get_26() throws ParseException {
             TagTrkpt tag = map.getValue(ImportPicture.toUTCDate("2017-05-29T01:23:26Z"));
-            assertThat(sdf.format(tag.time), is("2017-05-29T10:23:24Z"));
-            assertThat(tag.eleStr, is("615.00"));
-            assertThat(tag.lat, is(Double.valueOf(values[2][1])));
-            assertThat(tag.lon, is(Double.valueOf(values[2][2])));
-            assertThat(tag.magvarStr, is(notNullValue()));
+            assertThat(sdf.format(tag.time), is("2017-05-29T10:23:26Z"));
+            assertThat(tag.eleStr, is("615.03"));
+            assertTrue(tag.lat < Double.valueOf(values[2][1]));
+            assertTrue(tag.lat > Double.valueOf(values[3][1]));
+            assertTrue(tag.lon < Double.valueOf(values[2][2]));
+            assertTrue(tag.lon > Double.valueOf(values[3][2]));
+            assertNotNull(tag.magvarStr);
         }
 
         @Test
@@ -239,27 +252,20 @@ public class ElementMapTRKPTTest {
             assertThat(tag.eleStr, is("615.03"));
             assertThat(tag.lat, is(Double.valueOf(values[3][1])));
             assertThat(tag.lon, is(Double.valueOf(values[3][2])));
-            assertNotNull(tag.magvarStr);
+            assertEquals("0.0", tag.speedStr);
+            assertNull(tag.magvarStr);
         }
 
         @Test
         public void get_28() throws ParseException {
             TagTrkpt tag = map.getValue(ImportPicture.toUTCDate("2017-05-29T01:23:28Z"));
-            assertThat(sdf.format(tag.time), is("2017-05-29T10:23:27Z"));
-            assertThat(tag.eleStr, is("615.03"));
-            assertThat(tag.lat, is(Double.valueOf(values[3][1])));
-            assertThat(tag.lon, is(Double.valueOf(values[3][2])));
-            assertThat(tag.magvarStr, is(notNullValue()));
+            assertThat(tag, is(nullValue()));
         }
 
         @Test
         public void get_30() throws ParseException {
             TagTrkpt tag = map.getValue(ImportPicture.toUTCDate("2017-05-29T01:23:30Z"));
-            assertThat(sdf.format(tag.time), is("2017-05-29T10:23:27Z"));
-            assertThat(tag.eleStr, is("615.03"));
-            assertThat(tag.lat, is(Double.valueOf(values[3][1])));
-            assertThat(tag.lon, is(Double.valueOf(values[3][2])));
-            assertThat(tag.magvarStr, is(notNullValue()));
+            assertThat(tag, is(nullValue()));
         }
 
         @Test

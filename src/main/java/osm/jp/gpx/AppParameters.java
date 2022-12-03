@@ -175,7 +175,7 @@ public class AppParameters extends Properties {
         valueStr = this.getProperty(GPX_OVERWRITE_MAGVAR);
         if (valueStr == null) {
             update = true;
-            this.setProperty(GPX_OVERWRITE_MAGVAR, String.valueOf(false));
+            this.setProperty(GPX_OVERWRITE_MAGVAR, String.valueOf(true));
         }
 
         //------------------------------------------------
@@ -183,7 +183,7 @@ public class AppParameters extends Properties {
         valueStr = this.getProperty(GPX_OUTPUT_SPEED);
         if (valueStr == null) {
             update = true;
-            this.setProperty(GPX_OUTPUT_SPEED, String.valueOf(false));
+            this.setProperty(GPX_OUTPUT_SPEED, String.valueOf(true));
         }
 
         //------------------------------------------------
@@ -354,6 +354,10 @@ public class AppParameters extends Properties {
     	return isParam(AppParameters.GPX_OUTPUT_SPEED);
 	}
     
+	public void setGpxOutputSpeed(boolean v) {
+        this.setProperty(GPX_OUTPUT_SPEED, String.valueOf(v));
+	}
+
 	public boolean isGpxReuse() {
     	return isParam(AppParameters.GPX_REUSE);
 	}

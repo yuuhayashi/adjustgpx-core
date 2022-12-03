@@ -56,16 +56,16 @@ public class Expecter {
 	                // メタデータは インスタンスJpegImageMetadata であること
 	                assertThat((meta instanceof JpegImageMetadata), is(true));
 	                JpegImageMetadata jpegMetadata = (JpegImageMetadata)meta;
-	                assertNotNull(jpegMetadata);
+	                assertNotNull("メタデータは インスタンスJpegImageMetadata であること", jpegMetadata);
 	                
 	                // EXIFデータが存在すること
 	                TiffImageMetadata exif = jpegMetadata.getExif();
-	                assertNotNull(exif);
+	                assertNotNull("EXIFデータが存在すること", exif);
 	                
 	                // EXIF-TIME が正しく設定されていること
 	                String exifTime = ImportPicture.toEXIFString(ImportPicture.toEXIFDate(exif.getFieldValue(ExifTagConstants.EXIF_TAG_DATE_TIME_ORIGINAL)[0]));
 	                System.out.println("[debug] exifTime = '"+ exifTime +"' <--> '" + e.timeStr + "'");
-	                assertThat(exifTime, is(e.timeStr));
+	                assertThat("EXIF-TIME が正しく設定されていること", exifTime, is(e.timeStr));
 	                
 	                // LAT,LON
 	                GPSInfo gpsInfo = exif.getGPS();

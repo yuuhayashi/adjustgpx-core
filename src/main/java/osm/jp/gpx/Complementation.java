@@ -50,12 +50,17 @@ public class Complementation {
     	
     	if (imaTag.speedStr == null)  {
             double d = GeoDistance.calcDistHubeny(imaTag.lat, imaTag.lon, maeTag.lat, maeTag.lon);
-            String str = Double.toString((d * 3600) / (imaTag.time.getTime() - maeTag.time.getTime()));
-            int iDot = str.indexOf('.');
-            if (iDot > 0) {
-                str = str.substring(0, iDot+2);
+            if ((imaTag.time.getTime() - maeTag.time.getTime()) == 0) {
+                imaTag.speedStr = "0.0";
             }
-            imaTag.speedStr = str;
+            else {
+                String str = Double.toString((d * 3600) / (imaTag.time.getTime() - maeTag.time.getTime()));
+                int iDot = str.indexOf('.');
+                if (iDot > 0) {
+                    str = str.substring(0, iDot+2);
+                }
+                imaTag.speedStr = str;
+            }
     	}
     }
 
@@ -64,45 +69,38 @@ public class Complementation {
      * @throws ParseException
      */
     public void complementationMagvar() throws ParseException {
-    	if (imaTag.magvarStr != null) {
-            try {
-            	Double.parseDouble(imaTag.magvarStr);
-            }
-            catch (NumberFormatException e) {
-                // 数字以外なら<magvar>エレメントを削除する
-                imaTag.magvarStr = null;
-            }
-    	}
-    	
-    	if (imaTag.magvarStr == null) {
-            Double r = Math.cos(Math.toRadians((imaTag.lat + maeTag.lat) / 2)) * R;
-            Double x = Math.toRadians(imaTag.lon - maeTag.lon) * r;
-            Double y = Math.toRadians(imaTag.lat - maeTag.lat) * R;
-            double rad = Math.toDegrees(Math.atan2(y, x));
-            
-            if (y >= 0) {
-                if (x >= 0) {
-                    rad = 0 - (rad - 90);
-                }
-                else {
-                    rad = 360 - (rad - 90);
-                }
+        Double r = Math.cos(Math.toRadians((imaTag.lat + maeTag.lat) / 2)) * R;
+        Double x = Math.toRadians(imaTag.lon - maeTag.lon) * r;
+        Double y = Math.toRadians(imaTag.lat - maeTag.lat) * R;
+        double rad = Math.toDegrees(Math.atan2(y, x));
+        
+        if ((x == 0) && (y == 0)) {
+        	imaTag.magvarStr = null;
+        	return;
+        }
+        
+        if (y >= 0) {
+            if (x >= 0) {
+                rad = 0 - (rad - 90);
             }
             else {
-                if (x >= 0) {
-                    rad = 90 - rad;
-                }
-                else {
-                    rad = 90 - rad;
-                }
+                rad = 360 - (rad - 90);
             }
+        }
+        else {
+            if (x >= 0) {
+                rad = 90 - rad;
+            }
+            else {
+                rad = 90 - rad;
+            }
+        }
 
-            String str = Double.toString(rad);
-            int iDot = str.indexOf('.');
-            if (iDot > 0) {
-                str = str.substring(0, iDot);
-            }
-            imaTag.magvarStr = str;
-    	}
+        String str = Double.toString(rad);
+        int iDot = str.indexOf('.');
+        if (iDot > 0) {
+            str = str.substring(0, iDot);
+        }
+        imaTag.magvarStr = str;
     }
 }

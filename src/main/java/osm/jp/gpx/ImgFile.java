@@ -31,6 +31,7 @@ import org.xml.sax.SAXException;
 @SuppressWarnings("serial")
 public class ImgFile extends File {
 	boolean done = false;
+	boolean enable = true;		// 有効： デフォルトは有効、但し、SIMPLIFY_METERS以内の距離のIMGは無効にする。
 	Date imgtime = null;
 	Date gpstime = null;
 	double latitude = 0.0D;
@@ -49,6 +50,14 @@ public class ImgFile extends File {
     
     public boolean isDone() {
     	return this.done;
+    }
+    
+    public void setEnable(boolean enable) {
+    	this.enable = enable;
+    }
+    
+    public boolean isEnable() {
+    	return this.enable;
     }
     
     /**
@@ -271,6 +280,13 @@ public class ImgFile extends File {
             // 基準時刻（ファイル更新日時)
             return new Date(baseFile.lastModified());
         }
+    }
+    
+    public GeoPoint getPoint() {
+    	if (!isDone()) {
+    		return null;
+    	}
+    	return (new GeoPoint()).set(this.latitude, this.longitude);
     }
     
     /**

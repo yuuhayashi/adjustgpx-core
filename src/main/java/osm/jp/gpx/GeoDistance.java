@@ -45,6 +45,9 @@ public class GeoDistance {
 
     double sin = Math.sin(my);
     double w = Math.sqrt(1.0 - GRS80_E2 * sin * sin);
+    if (w == 0) {
+    	return 0;
+    }
     double m = GRS80_MNUM / (w * w * w);
     double n = GRS80_A / w;
 	

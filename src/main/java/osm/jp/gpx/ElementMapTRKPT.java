@@ -34,70 +34,32 @@ public class ElementMapTRKPT extends TreeMap<Date, TagTrkpt> {
     }
 
     /**
-     * 指定時刻(jptime)のTRKPTエレメントを取り出す。
-     * 
-     * @param jptime	指定する日時
-     * @return	エレメントTRKPT。指定時刻に対応するノードがないときはnullを返す。
-     * @throws ParseException
-     */
-    public TagTrkpt getValue(Date jptime) throws ParseException {
-    	TagTrkpt imaE = getTrkpt(jptime);
-        if (imaE != null) {
-            TagTrkpt maeE = getMaeTrkpt(imaE.time);
-            if (maeE != null) {
-            	Complementation comp = new Complementation(imaE, maeE);
-
-                // <MAGVAR>がなければ、
-                // 直前の位置と、現在地から進行方向を求める
-            	// 経度(longitude)と経度から進行方向を求める
-                if (params.isGpxOverwriteMagvar()) {
-                    comp.complementationMagvar();
-                }
-
-                // 緯度・経度と時間差から速度(km/h)を求める
-                if (params.isGpxOutputSpeed()) {
-                    comp.complementationSpeed();
-                }
-                //return (TagTrkpt)(comp.imaTag.trkpt.cloneNode(true));
-                return (TagTrkpt)(comp.imaTag);
-            }
-            return imaE;
-        }
-        return null;
-    }
-    
-    /**
      * [map]から指定した時刻の<trkpt>エレメントを取り出す。
-     * 取り出すエレメントは、指定した時刻と同一時刻、もしくは、直近・直前の時刻のエレメントとする。
+     * 取り出すエレメントは、指定した時刻と同一時刻、もしくは、最直後の時刻のエレメントとする。
      * 指定した時刻以前のエレメントが存在しない場合は null を返す。
-     * 指定した時刻と直近・直前のエレメントの時刻との乖離が プロパティ[OVER_TIME_LIMIT=3000(ミリ秒)]より大きい場合には null を返す。
      * 
      * @param jptime
      * @return	<trkpt>エレメント。対象のエレメントが存在しなかった場合には null。
      * @throws ParseException
      */
-    private TagTrkpt getTrkpt(Date jptime) throws ParseException {
+    public TagTrkpt getValue(Date jptime) throws ParseException {
 		try {
 	    	Date keyTime = null;
 	    	for (Date key : this.keySet()) {
                 int flag = jptime.compareTo(key);
                 if (flag < 0) {
-                    if (keyTime != null) {
-                        return this.get(keyTime);
-                    }
-                    return null;
+                	// key以前にjptimeがある
+                    return getValue(keyTime, key, jptime);
                 }
                 else if (flag == 0) {
-                    return this.get(key);
+                	// keyとjptimeは同時刻
+                    keyTime = new Date(key.getTime());
+                    return getValue(keyTime, key, jptime);
                 }
                 else if (flag > 0) {
+                	// key以後にjptimeがある
                     keyTime = new Date(key.getTime());
                 }
-	        }
-	        if (keyTime != null) {
-	            if (Math.abs(keyTime.getTime() - jptime.getTime()) <= OVER_TIME_LIMIT) {
-	                return this.get(keyTime);
-	            }
 	        }
 	        return null;
 		}
@@ -107,37 +69,44 @@ public class ElementMapTRKPT extends TreeMap<Date, TagTrkpt> {
     }
     
     /**
-     * ロガーの最終取得時刻を超えた場合、どこまでを有効とするかを設定する。
-     * この設定がないと、最終取得時刻を超えたものは全て有効になってしまう。
-     * OVER_TIME_LIMITは、GPSロガーの位置取得間隔（）よりも長くする必要がある。長すぎても良くない。
+     * 
+     * @param maeTime
+     * @param atoTime
+     * @param imaTime
+     * @return
+     * @throws ParseException
      */
-    public static long OVER_TIME_LIMIT = 3000;	// ミリ秒(msec)
-    
-    private TagTrkpt getMaeTrkpt(Date time) throws ParseException {
-    	Date maeTime = null;
-        for (Date key : this.keySet()) {
-            int flag = time.compareTo(key);
-            if (flag > 0) {
-                maeTime = new Date(key.getTime());
+    private TagTrkpt getValue(Date maeTime, Date atoTime, Date imaTime) throws ParseException {
+        if (maeTime != null) {
+        	TagTrkpt mae = this.get(maeTime);
+        	TagTrkpt ato = this.get(atoTime);
+        	Complementation comp = new Complementation(ato, mae);
+
+            // <MAGVAR>がなければ、
+            // 直前の位置と、現在地から進行方向を求める
+        	// 経度(longitude)と経度から進行方向を求める
+            if (params.isGpxOverwriteMagvar()) {
+                comp.complementationMagvar();
             }
-            else if (flag == 0) {
-                if (maeTime == null) {
-                    return null;
-                }
-                return this.get(maeTime);
+
+            // 緯度・経度と時間差から速度(km/h)を求める
+            if (params.isGpxOutputSpeed()) {
+                comp.complementationSpeed();
             }
-            else {
-                // time は key より古い
-                if (maeTime == null) {
-                    return null;
-                }
-                if (Math.abs(maeTime.getTime() - time.getTime()) > OVER_TIME_LIMIT) {
-                    return null;
-                }
-                return this.get(maeTime);
-            }
+            
+            TagTrkpt ima = (TagTrkpt)(comp.imaTag).clone();
+            ima.setTime(imaTime);
+        	double per = imaTime.getTime() - maeTime.getTime();
+        	if ((atoTime.getTime() - maeTime.getTime()) != 0) {
+        		per = per / (atoTime.getTime() - maeTime.getTime());
+        	}
+        	GeoPoint fPoint = (new GeoPoint()).set(ato.lat, ato.lon);
+        	GeoPoint point = (new GeoPoint()).set(mae.lat, mae.lon).getPer(fPoint, per);
+        	ima.lat = point.lat;
+        	ima.lon = point.lng;
+        	return ima;
         }
-        return null;
+        return this.get(imaTime);
     }
     
     public void printinfo() {
