@@ -100,4 +100,16 @@ public class ImgFolder extends ArrayList<ImgFile> {
             return diff;
         }
     }
+    
+    /**
+     * imgDir内の画像ファイルを表示する
+     */
+    public void printinfo() {
+        ImgFile.printheader();
+        for (ImgFile image : this) {
+        	image.printinfo();
+        }
+        ImgFile.printfooter();
+    	
+    }
 }

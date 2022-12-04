@@ -12,7 +12,6 @@ import java.nio.file.Paths;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.ResourceBundle;
 import java.util.TimeZone;
@@ -176,26 +175,18 @@ public class ImportPicture extends Thread {
                 return;
             }
 
+            gpxFolder.printinfo();
+            
             for (GpxFile gpxFile : gpxFolder) {
-            	gpxFile.parse();
-            	
                 System.out.println("time difference: "+ (delta / 1000) +"(sec)");
                 System.out.println("     Target GPX: ["+ gpxFile.getAbsolutePath() +"]");
                 System.out.println("           EXIF: "+ (params.isImgOutputExif() ? ("convert to '" + imgFolder.getOutDir().toAbsolutePath() +"'") : "off"));
-                System.out.println();
-
-            	gpxFile.printinfo();
             	imgFolder.procGPXfile(gpxFile, delta);
+                System.out.println();
             }
             
             // imgDir内の画像ファイルを処理する
-            ImgFile.printheader();
-            ArrayList<ImgFile> blacklist = new ArrayList<>();
-            
-            for (ImgFile image : imgFolder) {
-            	image.printinfo();
-            }
-            ImgFile.printfooter();
+            imgFolder.printinfo();
         }
         catch(ParserConfigurationException | SAXException | IOException | ParseException | ImageReadException | ImageWriteException | IllegalArgumentException | TransformerException e) {
             e.printStackTrace();

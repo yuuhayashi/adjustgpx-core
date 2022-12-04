@@ -66,7 +66,16 @@ public class GpxFolder extends ArrayList<GpxFile> {
 
         Arrays.sort(gpxfiles, new FileSort());
         for (File file : gpxfiles) {
-        	this.add(new GpxFile(params, file));
+        	GpxFile gpx = new GpxFile(params, file);
+        	gpx.parse();
+        	this.add(gpx);
+        }
+	}
+	
+	public void printinfo() {
+        for (GpxFile gpxFile : this) {
+        	gpxFile.printinfo();
+            System.out.println();
         }
 	}
 	
