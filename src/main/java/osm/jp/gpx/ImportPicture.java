@@ -185,7 +185,7 @@ public class ImportPicture extends Thread {
                 System.out.println();
             }
             
-            // imgDir内の画像ファイルを処理する
+            // imgDir内の画像ファイルを表示
             imgFolder.printinfo();
         }
         catch(ParserConfigurationException | SAXException | IOException | ParseException | ImageReadException | ImageWriteException | IllegalArgumentException | TransformerException e) {

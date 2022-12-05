@@ -15,7 +15,9 @@ class ImgFolder<ImgFile><<ArrayList>> {
 	void procGPXfile()
 }
 class ImgFile<<File>> {
-	Date getDate()
+	getDate() : Date
+	procImageFile(,,,)
+	printinfo()
 }
 
 class GpxFolder<GpxFile><<ArrayList>> {
@@ -26,14 +28,18 @@ class GpxFolder<GpxFile><<ArrayList>> {
 class GpxFile<<File>> {
 	gpx : GpxParser
 	parse()
+	exifWrite()
 	printinfo()
 }
 class GpxParser<<DefaultHandler>> {
-	TagTrkpt tag
-	ElementMapTRKPT trkpt
-	ElementMapTRKSEG trkseg
+	tag : TagTrkpt
+	trkpt : ElementMapTRKPT
+	trkseg : ElementMapTRKSEG
 }
-class ElementMapTRKPT<Date,TagTrkpt><<TreeMap>>
+class ElementMapTRKPT<Date,TagTrkpt><<TreeMap>> {
+	getValue(Date) : TagTrkpt
+	printinfo()
+}
 class ElementMapTRKSEG<Date,ElementMapTRKPT><<TreeMap>> {
 	printheader()
 	printfooter()
@@ -51,18 +57,19 @@ class TagTrkpt<<Cloneable>> {
 main -> ImportPicture : 1:setUp >
 
 AppParameters <--o ImportPicture : 1.1:new\n1.2:printout <
-ImportPicture o--> ImgFolder : 1.3:new\n2.4:printinfo() >
-ImportPicture o--> GpxFolder : 1.4:new\n2.2:printinfo()\n2.3:procGPXfile(gpxFile, delta) >
+ImportPicture o--> ImgFolder : 1.3:new\n2.3:procGPXfile(gpx,date)\n2.4:printinfo() >
+ImportPicture o--> GpxFolder : 1.4:new\n2.2:printinfo() >
 ImportPicture --> ImportPicture : 2:start >
 
-GpxFolder *-> GpxFile : 1.4.1:new\n1.4.2:parse() >
+GpxFolder *--> GpxFile : 1.4.1:new\n1.4.2:parse() >
 GpxFile *-> GpxParser : 1.4.1.1:new
 GpxParser o--> ElementMapTRKPT : 1.4.1.1.2:new(AppParameters)
 GpxParser o--> ElementMapTRKSEG : 1.4.1.1.1:new
 ElementMapTRKSEG o.. ElementMapTRKPT
 ElementMapTRKPT *-- TagTrkpt
 
-ImgFolder *-> ImgFile : 1.3.1:new\n2.4.1:printinfo() >
+ImgFolder *--> ImgFile : 1.3.1:new\n2.3.1:procImageFile()\n2.4.1:printinfo() >
+ImgFile ..> ElementMapTRKPT : 2.3.1.1:getValue(Date) >
 
 @enduml
 

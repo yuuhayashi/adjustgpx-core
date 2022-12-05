@@ -29,13 +29,11 @@ public class GpxParser extends DefaultHandler {
 	boolean kpt = false;
 	TagTrkpt tag = null;
 	public ElementMapTRKPT trkpt;
-	public ElementMapTRKSEG trkseg = new ElementMapTRKSEG();
+	public ElementMapTRKSEG trkseg;
 	
-    AppParameters params;
-
     public GpxParser(AppParameters params) {
         super();
-        this.params = params;
+        trkseg = new ElementMapTRKSEG();
         trkpt = new ElementMapTRKPT(params);
     }
     
