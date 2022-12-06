@@ -17,6 +17,7 @@ class ImgFolder<ImgFile><<ArrayList>> {
 class ImgFile<<File>> {
 	getDate() : Date
 	procImageFile(,,,)
+	exifWrite()
 	printinfo()
 }
 
@@ -28,7 +29,6 @@ class GpxFolder<GpxFile><<ArrayList>> {
 class GpxFile<<File>> {
 	gpx : GpxParser
 	parse()
-	exifWrite()
 	printinfo()
 }
 class GpxParser<<DefaultHandler>> {
@@ -68,7 +68,7 @@ GpxParser o--> ElementMapTRKSEG : 1.4.1.1.1:new
 ElementMapTRKSEG o.. ElementMapTRKPT
 ElementMapTRKPT *-- TagTrkpt
 
-ImgFolder *--> ImgFile : 1.3.1:new\n2.3.1:procImageFile()\n2.4.1:printinfo() >
+ImgFolder *--> ImgFile : 1.3.1:new\n2.3.1:procImageFile()\n2.3.1.2:exifWrite()\n2.4.1:printinfo() >
 ImgFile ..> ElementMapTRKPT : 2.3.1.1:getValue(Date) >
 
 @enduml

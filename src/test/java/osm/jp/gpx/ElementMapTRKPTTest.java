@@ -120,6 +120,10 @@ public class ElementMapTRKPTTest {
 
         @Test
         public void コンテンツの数をチェック() {
+        	ElementMapTRKPT.printheader();
+            map.printinfo();
+        	ElementMapTRKPT.printfooter();
+        	
             assertThat(map.size(), is(4));
         }
 

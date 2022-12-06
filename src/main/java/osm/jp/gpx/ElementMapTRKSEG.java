@@ -38,23 +38,12 @@ public class ElementMapTRKSEG extends TreeMap<Date, ElementMapTRKPT> {
         }
     }
 	
-    public void printheader() {
-        System.out.println("|--------------------------------+------------------------+------------------------|");
-        System.out.println("| GPS logging time               | First Time             | Last Time              |");
-        System.out.println("|--------------------------------+------------------------+------------------------|");
-    }
-
-    public void printfooter() {
-        System.out.println("|--------------------------------+------------------------+------------------------|");
-        System.out.println();
-    }
-
     public void printinfo() {
-    	printheader();
+    	ElementMapTRKPT.printheader();
         for (java.util.Map.Entry<Date, ElementMapTRKPT> map : this.entrySet()) {
             ElementMapTRKPT mapTRKPT = map.getValue();
             mapTRKPT.printinfo();
         }
-        printfooter();
+        ElementMapTRKPT.printfooter();
     }
 }

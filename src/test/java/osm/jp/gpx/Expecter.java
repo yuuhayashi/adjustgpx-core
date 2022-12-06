@@ -25,6 +25,15 @@ public class Expecter {
     double lonD;
     String magvar;
 
+    /**
+     * コンストラクタ
+     * @param value		[0] 画像ファイルの相対パス
+     * @param expect	[1] 存在するかどうか
+     * @param timeStr	[2] 撮影時刻
+     * @param latD		[3] 緯度
+     * @param lonD		[4] 経度
+     * @param magvar	[5] 方向(0-359),設定されていないことを期待する場合にはnullとする
+     */
     public Expecter(String value, boolean expect, String timeStr, double latD, double lonD, String magvar) {
         this.value = value;
         this.expect = expect;

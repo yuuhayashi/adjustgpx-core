@@ -102,7 +102,7 @@ public class Fixture {
             "target/test-classes/ini/AdjustTime.20170518.A1.ini",
             new Expecter[] {
                 new Expecter("10170518/DSC05183.JPG", false, null, 90.0D, 180.0D, null),
-                new Expecter("10170518/DSC05184.JPG", true, "2017:05:18 09:34:44", 35.4367520000D, 139.4082730000D, null),
+                new Expecter("10170518/DSC05184.JPG", true, "2017:05:18 09:34:44", 35.4367520000D, 139.4082730000D, "359"),
                 new Expecter("10170518/DSC05196.JPG", true, "2017:05:18 09:37:32", 35.4376820000D, 139.4085150000D, null),
                 new Expecter("10170518/DSC05204.JPG", true, "2017:05:18 09:46:48", 35.4368560000D, 139.4082190000D, null),
                 new Expecter("10170518/DSC05205.JPG", false, null, 90.0D, 180.0D, null),

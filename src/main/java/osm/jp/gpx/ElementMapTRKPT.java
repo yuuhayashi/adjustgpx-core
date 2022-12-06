@@ -109,6 +109,17 @@ public class ElementMapTRKPT extends TreeMap<Date, TagTrkpt> {
         return this.get(imaTime);
     }
     
+    public static void printheader() {
+        System.out.println("|--------------------------------+------------------------+------------------------|");
+        System.out.println("| GPS logging time               | First Time             | Last Time              |");
+        System.out.println("|--------------------------------+------------------------+------------------------|");
+    }
+
+    public static void printfooter() {
+        System.out.println("|--------------------------------+------------------------+------------------------|");
+        System.out.println();
+    }
+
     public void printinfo() {
     	Date firstTime = null;
     	Date lastTime = null;
@@ -118,6 +129,11 @@ public class ElementMapTRKPT extends TreeMap<Date, TagTrkpt> {
             }
             lastTime = new Date(key.getTime());
         }
-        System.out.println(String.format("|                      <trkseg/> |%20s|%20s|", ImportPicture.toUTCString(firstTime), ImportPicture.toUTCString(lastTime)));
+        System.out.println(
+    		String.format("|                      <trkseg/> |%20s|%20s|"
+    				, ImportPicture.toUTCString(firstTime)
+    				, ImportPicture.toUTCString(lastTime)
+    		)
+        );
     }
 }
