@@ -51,7 +51,7 @@ public class ImportPictureUnitTest {
             File outDir = new File(params.getProperty(AppParameters.IMG_OUTPUT_FOLDER));
             assertThat(outDir.exists(), is(true));
             
-            Expecter.check(dataset);
+            dataset.check();
         }
 
         @Test
@@ -69,7 +69,7 @@ public class ImportPictureUnitTest {
             File outDir = new File(params.getProperty(AppParameters.IMG_OUTPUT_FOLDER));
             assertThat(outDir.exists(), is(true));
             
-            Expecter.check(dataset);
+            dataset.check();
         }
 
         static String comparePosition(double b) {

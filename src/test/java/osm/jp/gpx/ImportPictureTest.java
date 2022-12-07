@@ -27,7 +27,7 @@ public class ImportPictureTest {
     public void testParameter(Fixture dataset) throws Exception {
         setup(dataset);
         testdo(dataset.iniFilePath);
-        Expecter.check(dataset);
+        dataset.check();
     }
 
     void setup(Fixture dataset) throws IOException {
