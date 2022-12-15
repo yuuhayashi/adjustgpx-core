@@ -1,5 +1,7 @@
 package osm.jp.gpx;
 
+import java.text.ParseException;
+
 public class GeoPoint implements Cloneable {
 	public double lat;
 	public double lng;
@@ -7,6 +9,11 @@ public class GeoPoint implements Cloneable {
 	public GeoPoint set(double lat, double lng) {
 		this.lat = lat;
 		this.lng = lng;
+		return this;
+	}
+	
+	public GeoPoint set(Double dlat, Double dlng) {
+		set(dlat.doubleValue(), dlng.doubleValue());
 		return this;
 	}
 	
@@ -41,6 +48,42 @@ public class GeoPoint implements Cloneable {
 		return GeoDistance.calcDistHubeny(this.lat, this.lng, obj.lat, obj.lng);
 	}
 	
+	/**
+	 * 経度(longitude)と経度から進行方向を求める
+	 * @param pre
+	 * @return	MAGVARの値。"0.0".."359.9", ２点間の移動がない場合はNULL
+	 * @throws ParseException
+	 */
+    public String complementationMagvar(GeoPoint pre) throws ParseException {
+        Double r = Math.cos(Math.toRadians((this.lat + pre.lat) / 2)) * Complementation.R;
+        Double x = Math.toRadians(this.lng - pre.lng) * r;
+        Double y = Math.toRadians(this.lat - pre.lat) * Complementation.R;
+        double rad = Math.toDegrees(Math.atan2(y, x));
+        
+        if ((x == 0) && (y == 0)) {
+        	return null;
+        }
+        
+        if (y >= 0) {
+            if (x >= 0) {
+                rad = 0 - (rad - 90);
+            }
+            else {
+                rad = 360 - (rad - 90);
+            }
+        }
+        else {
+            if (x >= 0) {
+                rad = 90 - rad;
+            }
+            else {
+                rad = 90 - rad;
+            }
+        }
+
+        return String.format("%.1f", rad);
+    }
+
     /**
      * 緯度・経度と時間差から速度(km/h)を求める
      * 

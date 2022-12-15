@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.channels.FileChannel;
+import java.nio.file.Path;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.util.Calendar;
@@ -74,18 +75,17 @@ public class ImgFile extends File {
      * @param params :AppParameters
      * @param delta		:long
      * @param gpxFile	:GpxFile
-     * @param outDir	:File
+     * @param preImg	:ImgFile
      * @return
      * @throws ParseException
      * @throws ImageReadException
      * @throws IOException
      * @throws ImageWriteException
-     * @throws ParserConfigurationExceptionGpxFile
+     * @throws ParserConfigurationException
      * @throws SAXException
      */
-    public boolean procImageFile(AppParameters params, long delta, GpxFile gpxFile, File outDir) throws ParseException, ImageReadException, IOException, ImageWriteException, ParserConfigurationException, SAXException {
+    public TagTrkpt procImageFile(AppParameters params, long delta, GpxFile gpxFile, ImgFile preImg) throws ParseException, ImageReadException, IOException, ImageWriteException, ParserConfigurationException, SAXException {
     	//ElementMapTRKSEG mapTRKSEG = gpxFile.parse();
-    	boolean exifWrite = params.isImgOutputExif();
         
         // itime <-- 画像ファイルの撮影時刻
         //			ファイルの更新日時／EXIFの撮影日時
@@ -107,7 +107,8 @@ public class ImgFile extends File {
 
         if (trkptT == null) {
             if (!params.isImgOutputAll()) {
-                return false;
+            	this.setEnable(false);
+                return null;
             }
         }
         else {
@@ -118,21 +119,68 @@ public class ImgFile extends File {
             	eleStr = trkptT.eleStr;
             }
             
-            if (trkptT.magvarStr != null) {
-            	magvarStr = trkptT.magvarStr;
-            }
-            
-            if (trkptT.speedStr != null) {
-            	speedStr = trkptT.speedStr;
+            if (preImg != null) {
+                // simplify distance (m) 
+    			GeoPoint prepoint = preImg.getPoint();
+    			GeoPoint imapoint = (new GeoPoint()).set(this.latitude, this.longitude);
+        		double simplify = params.getSimplifyMeters();
+        		if (simplify > 0) {
+        			if (prepoint.getDistance(imapoint) < simplify) {
+        				this.setEnable(false);
+        				return null;
+        			}
+        		}
+
+        		// MAGVAR
+        		if (params.isGpxOverwriteMagvar()) {
+                    // 直前の位置と、現在地から進行方向を求める
+                	// 経度(longitude)と経度から進行方向を求める
+                    if (params.isGpxOverwriteMagvar()) {
+                    	trkptT.magvarStr = imapoint.complementationMagvar(prepoint);
+                    }
+
+                    // 緯度・経度と時間差から速度(km/h)を求める
+                    if (params.isGpxOutputSpeed()) {
+						double speed = imapoint.complementationSpeed(prepoint, preImg.imgtime.getTime());
+						trkptT.speedStr = String.format("%.1f", speed);
+                    }
+                }
+                if (trkptT.magvarStr != null) {
+                	magvarStr = trkptT.magvarStr;
+                }
+                
+                if (trkptT.speedStr != null) {
+                	speedStr = trkptT.speedStr;
+                }
             }
         }
-
+        return trkptT;
+    }
+    
+    /**
+     * ファイルに書き出す
+     * @param params :AppParameters
+     * @param trkptT
+     * @param outDir
+     * @return
+     * @throws ImageReadException
+     * @throws ImageWriteException
+     * @throws IOException
+     */
+    public void exportToFile(AppParameters params, TagTrkpt trkptT, Path outPath) throws ImageReadException, ImageWriteException, IOException {
+        File outDir = outPath.toFile();
         outDir.mkdir();
-        if (exifWrite) {
-            exifWrite(this, gpstime, trkptT, outDir);
+        if (trkptT == null) {
+            if (!params.isImgOutputAll()) {
+            	this.setEnable(false);
+            }
         }
         else {
-            if (params.isImgOutputAll()) {
+            if (params.isImgOutputExif()) {
+            	// EXIF出力
+                exifWrite(this, gpstime, trkptT, outDir);
+            }
+            else {
                 // EXIFの変換を伴わない単純なファイルコピー
                 FileInputStream sStream = new FileInputStream(this);
                 FileInputStream dStream = new FileInputStream(new File(outDir, this.getName()));
@@ -140,6 +188,7 @@ public class ImgFile extends File {
                 FileChannel destChannel = dStream.getChannel();
                 try {
                     srcChannel.transferTo(0, srcChannel.size(), destChannel);
+                	this.setEnable(true);
                 }
                 finally {
                     srcChannel.close();
@@ -149,7 +198,6 @@ public class ImgFile extends File {
                 }
             }
         }
-        return true;
     }
     
     void exifWrite(File imageFile, Date correctedtime, TagTrkpt trkptT, File outDir) throws ImageReadException, IOException, ImageWriteException {

@@ -59,7 +59,9 @@ public class ImgFolder extends ArrayList<ImgFile> {
         for (ImgFile image : this) {
         	try {
         		if (!image.isDone()) {
-                    if(image.procImageFile(params, delta, gpxFile, outDir.toFile())) {
+        			TagTrkpt tag = image.procImageFile(params, delta, gpxFile, pre);
+                    if (tag != null) {
+                    	image.exportToFile(params, tag, outDir);
                     	image.setDone(true);
                     	if (pre == null) {
                     		pre = image;

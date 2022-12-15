@@ -35,28 +35,9 @@ public class ImportPictureUnitTest {
             UnZip.uncompress(new File(dataset.tarFilePath), new File("target/test-classes/cameradata"));
         }
 
-
-        @Test
-        public void test() throws Exception {
-    		Fixture dataset = Fixture.datas[0];
-            try {
-                ImportPictureUnitTest.testdo(dataset.iniFilePath);
-            }
-            catch (Exception e) {
-                e.printStackTrace();
-                fail("Exceptionが発生した。");
-            }
-
-            AppParameters params = new AppParameters(dataset.iniFilePath);
-            File outDir = new File(params.getProperty(AppParameters.IMG_OUTPUT_FOLDER));
-            assertThat(outDir.exists(), is(true));
-            
-            dataset.check();
-        }
-
         @Test
         public void testMAGVAR_ON() throws Exception {
-    		Fixture dataset = Fixture.datas[1];
+    		Fixture dataset = Fixture.datas[0];
             try {
                 ImportPictureUnitTest.testdo(dataset.iniFilePath);
             }
