@@ -43,10 +43,6 @@ public class AppParameters extends Properties {
     // 出力IMG: IMG出力をする  {ON | OFF}
     public static String IMG_OUTPUT = "IMG.OUTPUT";
 
-    // 出力IMG: 'out of time'も IMG出力の対象とする  {ON | OFF}
-    // 　　この場合は、対象IMGフォルダ内のすべてのIMGファイルが出力フォルダに出力される
-    public static String IMG_OUTPUT_ALL = "IMG.OUTPUT_ALL";
-
     // 出力IMG: EXIFを変換する
     public static String IMG_OUTPUT_EXIF = "IMG.OUTPUT_EXIF";
 
@@ -137,15 +133,6 @@ public class AppParameters extends Properties {
         this.setProperty(IMG_OUTPUT, String.valueOf(valueStr));
 
         //------------------------------------------------
-        // 出力IMG: 'out of time'も IMG出力の対象とする
-        valueStr = this.getProperty(IMG_OUTPUT_ALL);
-        if (valueStr == null) {
-            update = true;
-            valueStr = String.valueOf(false);
-        }
-        this.setProperty(IMG_OUTPUT_ALL, String.valueOf(valueStr));
-
-        //------------------------------------------------
         // IMG出力: EXIFを変換する
         valueStr = this.getProperty(IMG_OUTPUT_EXIF);
         if (valueStr == null) {
@@ -215,12 +202,6 @@ public class AppParameters extends Properties {
             setProperty(AppParameters.GPX_NO_FIRST_NODE, Boolean.toString(false));
     	}
     	
-    	valueStr = getProperty(AppParameters.IMG_OUTPUT_ALL);
-    	if (valueStr == null) {
-            update = true;
-            setProperty(AppParameters.IMG_OUTPUT_ALL, Boolean.toString(false));
-    	}
-
     	valueStr = getProperty(AppParameters.GPX_OVERWRITE_MAGVAR);
     	if (valueStr == null) {
             update = true;
@@ -258,7 +239,6 @@ public class AppParameters extends Properties {
         System.out.println(" - param： "+ AppParameters.IMG_SOURCE_FOLDER +"="+ getProperty(AppParameters.IMG_SOURCE_FOLDER) );
         System.out.println(" - param： "+ AppParameters.IMG_OUTPUT_FOLDER +"="+ getProperty(AppParameters.IMG_OUTPUT_FOLDER) );
         System.out.println(" - param： "+ AppParameters.IMG_OUTPUT +"="+ getProperty(AppParameters.IMG_OUTPUT));     
-        System.out.println(" - param： "+ AppParameters.IMG_OUTPUT_ALL +"="+ isImgOutputAll());
         System.out.println(" - param： "+ AppParameters.IMG_OUTPUT_EXIF +"= "+ isImgOutputExif());
         System.out.println(" - param： "+ AppParameters.GPX_SOURCE_FOLDER +"="+ getProperty(AppParameters.GPX_SOURCE_FOLDER));
         System.out.println(" - param： "+ AppParameters.GPX_OVERWRITE_MAGVAR +"="+ getProperty(AppParameters.GPX_OVERWRITE_MAGVAR));
@@ -338,10 +318,6 @@ public class AppParameters extends Properties {
     	return isParam(AppParameters.GPX_NO_FIRST_NODE);
     }
 	
-	public boolean isImgOutputAll() {
-    	return isParam(AppParameters.IMG_OUTPUT_ALL);
-	}
-
 	public boolean isGpxOverwriteMagvar() {
     	return isParam(AppParameters.GPX_OVERWRITE_MAGVAR);
 	}

@@ -52,12 +52,6 @@ public class GpxFolder extends ArrayList<GpxFile> {
                     String.format(ImportPicture.i18n.getString("msg.110"), gpxDir.getAbsolutePath())
                 );
             }
-            if (params.isImgOutputAll() && (gpxfiles.length > 1)) {
-                // "複数のGPXファイルがあるときには、'IMG.OUTPUT_ALL'オプションは指定できません。"
-            	throw new FileNotFoundException(
-                    String.format(ImportPicture.i18n.getString("msg.120"))
-                );
-            }
         }
         else {
         	// GPXファイルまたはディレクトリが存在しません。('%s')

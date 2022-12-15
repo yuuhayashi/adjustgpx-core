@@ -31,7 +31,7 @@ http://sourceforge.jp/projects/importpicture/wiki/FrontPage
 下記のように'AdjustGpx'を起動するとGUIでパラメータを逐次設定可能です。（推奨起動方法）
 
 ```
-> java -cp AdjustGpx.jar osm.jp.gpx.matchtime.gui.AdjustGpx
+> java -cp adjustgpx-core.jar adjustgpx-core.ini
 ```
 
 下記のコマンドラインによる起動方式は度重なる機能追加によりパラメーターが増大したため複雑になりすぎ作者でさえわけがわからなくなりました。
@@ -41,11 +41,13 @@ http://sourceforge.jp/projects/importpicture/wiki/FrontPage
 GUI版の'AdjustTerra.jar'を使ってください。
 
 ```
-> java -jar AdjustGpx.jar <outputfile> <targetDir> <time base image> <time> <gpx>
+> java -jar adjustgpx-core.jar <parameter file>
 ```
 
 | (パラメータ) |    |
-| -------- | --------------------------- |
+| ----------- | --------------------------- |
+| argv[0]     | パラメータファイル(adjustgpx-core.ini)  |
+
 | argv[0]  | 画像リストの出力ファイル  |
 | argv[1] | 画像ファイルが格納されているディレクトリ |
 | argv[2] | 時刻補正の基準とする画像ファイル |
@@ -55,6 +57,28 @@ GUI版の'AdjustTerra.jar'を使ってください。
 ```
 exp) java -jar AdjustGpx.jar list.csv . IMG_01234.JPG 2012-06-15T12:52:22 鎌倉宮_2012-06-15_12-00-16.gpx
 ```
+
+## パラメータファイル(adjustgpx-core.ini)
+
+| key               | 設定例       | コメント    |
+| ----------------- | ------------ | ------------------------------------------- |
+| IMG.BASE_FILE     |              | 基準時刻画像(正確な撮影時刻が判明できる画像) |
+| IMG.SOURCE_FOLDER | img          | 対象IMGフォルダ:(位置情報を付加したい画像ファイルが格納されているフォルダ) |
+| IMG.OUTPUT_FOLDER | output       | 変換された画像ファイルを出力するフォルダ |
+| IMG.TIME          |              | GPX: ファイル更新時刻 yyyy:MM:dd HH:mm:ss.SSS |
+| GPX.SOURCE_FOLDER | gpx          | GPXファイルが格納されたフォルダ |
+| GPX.BASETIME      | FILE_UPDATE  | 基準時刻をEXIF/ファイル更新時刻の何方にするか {FILE_UPDATE | EXIF_TIME}  |
+| GPX.noFirstNode   | true         | GPX: <trkseg>セグメントの最初の１ノードは無視する。(最初のノードはゴミデータになっていることが多いため) |
+| GPX.OVERWRITE_MAGVAR | true      | ソース画像のEXIFにあるMAGVARを無視して新たに書き換える |
+| GPX.gpxSplit      | true         |  GPX: 時間的に間隔が開いたGPXログを別の<trkseg>セグメントに分割する。 {ON | OFF}  |
+| IMG.OUTPUT_EXIF   | true         | 出力IMG: EXIFを変換する    |
+| IMG.OUTPUT        | true         | IMG出力をする  {ON | OFF}    |
+| GPX.OUTPUT_SPEED  | true         | 出力GPX: <SPEED>を上書き出力する {ON | OFF}    |
+| GPX.OUTPUT_WPT    | true         | ?    |
+| GPX.REUSE         | true         | ? |
+| SIMPLIFY_METERS   | 0.0          | simplify distance (m)  |
+
+
 
 ## GUIバージョン
 

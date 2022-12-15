@@ -62,7 +62,7 @@ public class Fixture {
 	            File file = new File(outDir, e.value);
 	            System.out.println("[JUnit.debug] assert file='"+ file.getAbsolutePath() +"'");
 	            assertThat(file.exists(), is(e.expect));
-	            if (e.timeStr != null) {
+	            if (e.expect) {
 	            	
 	                // JPEG メタデータが存在すること
 	                ImageMetadata meta = Imaging.getMetadata(file);

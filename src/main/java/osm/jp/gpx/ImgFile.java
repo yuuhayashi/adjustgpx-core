@@ -106,10 +106,8 @@ public class ImgFile extends File {
         }
 
         if (trkptT == null) {
-            if (!params.isImgOutputAll()) {
-            	this.setEnable(false);
-                return null;
-            }
+        	this.setEnable(false);
+            return null;
         }
         else {
             latitude = trkptT.lat;
@@ -171,9 +169,7 @@ public class ImgFile extends File {
         File outDir = outPath.toFile();
         outDir.mkdir();
         if (trkptT == null) {
-            if (!params.isImgOutputAll()) {
-            	this.setEnable(false);
-            }
+        	this.setEnable(false);
         }
         else {
             if (params.isImgOutputExif()) {
