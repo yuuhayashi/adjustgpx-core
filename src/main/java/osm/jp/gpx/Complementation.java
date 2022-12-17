@@ -38,20 +38,20 @@ public class Complementation {
      * 
      */
     public void complementationSpeed() {
-    	if (imaTag.speedStr != null)  {
+    	if (imaTag.getSpeed() != null)  {
             try {
-            	Double.parseDouble(imaTag.speedStr);
+            	Double.parseDouble(imaTag.getSpeed());
             }
             catch (NumberFormatException e) {
                 // 数字以外なら<speed>エレメントを削除する
-                imaTag.speedStr = null;
+                imaTag.clearSpeed();
             }
     	}
     	
-    	if (imaTag.speedStr == null)  {
+    	if (imaTag.getSpeed() == null)  {
             double d = GeoDistance.calcDistHubeny(imaTag.lat, imaTag.lon, maeTag.lat, maeTag.lon);
             if ((imaTag.time.getTime() - maeTag.time.getTime()) == 0) {
-                imaTag.speedStr = "0.0";
+                imaTag.setSpeed("0.0");
             }
             else {
                 String str = Double.toString((d * 3600) / (imaTag.time.getTime() - maeTag.time.getTime()));
@@ -59,7 +59,7 @@ public class Complementation {
                 if (iDot > 0) {
                     str = str.substring(0, iDot+2);
                 }
-                imaTag.speedStr = str;
+                imaTag.setSpeed(str);
             }
     	}
     }

@@ -1,5 +1,6 @@
 package osm.jp.gpx;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 /**
@@ -19,7 +20,7 @@ public class TagTrkpt implements Cloneable {
     public String eleStr = null;
     public Date time = null;
     public String magvarStr = null;
-    public String speedStr = null;
+    private String speedStr = null;
 
     public TagTrkpt(Double lat, Double lon) {
     	this.lat = lat;
@@ -63,8 +64,26 @@ public class TagTrkpt implements Cloneable {
     	this.magvarStr = magvar;
     }
     
+    public void setSpeed(double speed) {
+    	this.speedStr = rounding(1, speed);
+    }
+    
     public void setSpeed(String speed) {
-    	this.speedStr = speed;
+    	try {
+    		Double.valueOf(speed);
+    		this.speedStr = speed;
+    	}
+    	catch (Exception e) {
+    		clearSpeed();
+    	}
+    }
+    
+    public void clearSpeed() {
+    	this.speedStr = null;
+    }
+    
+    public String getSpeed() {
+    	return this.speedStr;
     }
     
     public String toString() {
@@ -90,5 +109,24 @@ public class TagTrkpt implements Cloneable {
     	ret += ">";
     	System.out.println(ret);
     	return ret;
+    }
+    
+    
+    /**
+     * 小数点以下scale桁の数値に丸めた値を返す
+     * @param scale
+     * @param str
+     * @return
+     */
+    static String rounding(int scale, double d) {
+    	try {
+    		BigDecimal bd = BigDecimal.valueOf(d);
+    		BigDecimal bd1 = bd.setScale(scale, BigDecimal.ROUND_HALF_UP);
+    		String str = bd1.toString();
+    		return str;
+    	}
+    	catch(Exception e) {
+    		return null;
+    	}
     }
 }

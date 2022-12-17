@@ -221,7 +221,7 @@ public class ElementMapTRKPTTest {
             assertThat(tag.eleStr, is("615.00"));
             assertThat(tag.lat, is(Double.valueOf(values[2][1])));
             assertThat(tag.lon, is(Double.valueOf(values[2][2])));
-            assertEquals("0.0", tag.speedStr);
+            assertEquals("0.0", tag.getSpeed());
             assertNull(tag.magvarStr);
         }
 
@@ -256,7 +256,7 @@ public class ElementMapTRKPTTest {
             assertThat(tag.eleStr, is("615.03"));
             assertThat(tag.lat, is(Double.valueOf(values[3][1])));
             assertThat(tag.lon, is(Double.valueOf(values[3][2])));
-            assertEquals("0.0", tag.speedStr);
+            assertEquals("0.0", tag.getSpeed());
             assertNull(tag.magvarStr);
         }
 

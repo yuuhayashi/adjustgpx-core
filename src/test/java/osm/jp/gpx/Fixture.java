@@ -93,11 +93,8 @@ public class Fixture {
 	                // ELE
 	                //RationalNumber[] ele = (RationalNumber[]) exif.getFieldValue(GpsTagConstants.GPS_TAG_GPS_ALTITUDE);
 	                
-	                // MAGVAR
-	                checkItem(exif, GpsTagConstants.GPS_TAG_GPS_IMG_DIRECTION.name, e.magvar);
-	                
-	                // SPEED
-	                
+	                // MAGVAR, SPEED
+	                checkItem(exif, e);
 	            }
 	        }
 		} catch (Exception e1) {
@@ -111,8 +108,9 @@ public class Fixture {
      * @param keyword	例：GpsTagConstants.GPS_TAG_GPS_IMG_DIRECTION.name;
      * @param value		期待する値（nullの場合はアイテムが設定されていないことを期待する）
      */
-    void checkItem(TiffImageMetadata exif, String keyword, String value) {
-    	boolean is = false;
+    void checkItem(TiffImageMetadata exif, Expecter e) {
+    	boolean isMagvar = false;
+    	boolean isSpeed = false;
     	List<? extends ImageMetadataItem> dirs = exif.getDirectories();
     	for (ImageMetadataItem dir : dirs) {
     		if (dir instanceof TiffImageMetadata.Directory) {
@@ -122,21 +120,34 @@ public class Fixture {
         				String str = item.toString();
         				assertNotNull(str);
         				TiffImageMetadata.TiffMetadataItem tiffitem = (TiffImageMetadata.TiffMetadataItem)item;
-        				if (tiffitem.getKeyword() == keyword) {
-        					if (value == null) {
+        				if (tiffitem.getKeyword().equals(GpsTagConstants.GPS_TAG_GPS_IMG_DIRECTION.name)) {
+        					if (e.magvar == null) {
         			    		fail("MAGVARが設定されている");
         					}
         					str = tiffitem.getText();
             				assertNotNull(str);
-            				assertThat(str, is(value));
-            				is = true;	// MAGVARが設定されている
+            				assertThat(str, is(e.magvar));
+            				isMagvar = true;	// MAGVARが設定されている
+        				}
+        				if (tiffitem.getKeyword().equals(GpsTagConstants.GPS_TAG_GPS_SPEED.name)) {
+        					if (e.speed == null) {
+        			    		fail("SPEEDが設定されている");
+        					}
+        					str = tiffitem.getText();
+            				assertNotNull(str);
+            				System.out.println("GPS_TAG_GPS_SPEED "+ e.value +" : '"+ str +"' = '"+ e.speed +"'");
+            				assertThat(str, is(e.speed));
+            				isSpeed = true;	// SPEEDが設定されている
         				}
         			}
     			}
     		}
     	}
-    	if (!is && (value != null)) {
+    	if (!isMagvar && (e.magvar != null)) {
     		fail("MAGVARが設定されていない");
+    	}
+    	if (!isSpeed && (e.speed != null)) {
+    		fail("SPEEDが設定されていない");
     	}
     }
     
@@ -197,7 +208,7 @@ public class Fixture {
      */
     @DataPoints
     public static Fixture[] datas = {
-        // datas[0]
+        // datas[0] speed=on
         new Fixture(
             "[A1].SONYカメラの場合.FILE_UPDATE時間を基準にして時間外のファイルはコピー対象外の時",
             "target/test-classes/imgdata/Sony20170518-5.tar.gz", 
@@ -205,30 +216,29 @@ public class Fixture {
             "target/test-classes/cameradata/20170518.gpx",
             "target/test-classes/ini/AdjustTime.20170518.A1.ini",
             new Expecter[] {
-                new Expecter("10170518/DSC05183.JPG", false, null, 90.0D, 180.0D, null),
-                new Expecter("10170518/DSC05184.JPG", true, "2017:05:18 09:34:44", 35.4367520000D, 139.4082730000D, null),
-                new Expecter("10170518/DSC05196.JPG", true, "2017:05:18 09:37:32", 35.4376820000D, 139.4085150000D, "383/10 (38.3)"),
-                new Expecter("10170518/DSC05204.JPG", true, "2017:05:18 09:46:48", 35.4368560000D, 139.4082190000D, "1131/5 (226.2)"),
-                new Expecter("10170518/DSC05205.JPG", false, null, 90.0D, 180.0D, null),
+                new Expecter("10170518/DSC05183.JPG", false, null, 90.0D, 180.0D, null, null),
+                new Expecter("10170518/DSC05184.JPG", true, "2017:05:18 09:34:44", 35.4367520000D, 139.4082730000D, null, "0"),
+                new Expecter("10170518/DSC05196.JPG", true, "2017:05:18 09:37:32", 35.4376820000D, 139.4085150000D, "383/10 (38.3)", "11/10 (1.1)"),
+                new Expecter("10170518/DSC05204.JPG", true, "2017:05:18 09:46:48", 35.4368560000D, 139.4082190000D, "1131/5 (226.2)", "1/2 (0.5)"),
+                new Expecter("10170518/DSC05205.JPG", false, null, 90.0D, 180.0D, null, null),
             }
         ),
-        // datas[1]
-        new Fixture(
-        		
+        // datas[1] speed=on
+        new Fixture(        		
             "[A2].SONYカメラの場合.FILE_UPDATE時間を基準にして時間外のファイルもコピーする時",
             "target/test-classes/imgdata/Sony20170518-5.tar.gz", 
             "target/test-classes/cameradata/20170518.gpx",
             "target/test-classes/output/20170518.gpx",
             "target/test-classes/ini/AdjustTime.20170518.A2.ini",
             new Expecter[] {
-                new Expecter("10170518/DSC05183.JPG", false, null, 90.0D, 180.0D, null),
-                new Expecter("10170518/DSC05184.JPG", true, "2017:05:18 09:34:44", 35.4367520000D, 139.4082730000D, null),
-                new Expecter("10170518/DSC05196.JPG", true, "2017:05:18 09:37:32", 35.4376820000D, 139.4085150000D, "383/10 (38.3)"),
-                new Expecter("10170518/DSC05204.JPG", true, "2017:05:18 09:46:48", 35.4368560000D, 139.4082190000D, "1131/5 (226.2)"),
-                new Expecter("10170518/DSC05205.JPG", false, null, 90.0D, 180.0D, null),
+                new Expecter("10170518/DSC05183.JPG", false, null, 90.0D, 180.0D, null, null),
+                new Expecter("10170518/DSC05184.JPG", true, "2017:05:18 09:34:44", 35.4367520000D, 139.4082730000D, null, "0"),
+                new Expecter("10170518/DSC05196.JPG", true, "2017:05:18 09:37:32", 35.4376820000D, 139.4085150000D, "383/10 (38.3)", "11/10 (1.1)"),
+                new Expecter("10170518/DSC05204.JPG", true, "2017:05:18 09:46:48", 35.4368560000D, 139.4082190000D, "1131/5 (226.2)", "1/2 (0.5)"),
+                new Expecter("10170518/DSC05205.JPG", false, null, 90.0D, 180.0D, null, null),
             }
         ),
-        // datas[2]
+        // datas[2] speed=on
         new Fixture(
             "[B1].WiMiUSカメラの場合.FILE_UPDATE時間を基準にして時間外のファイルはコピー対象外の時",
             "target/test-classes/imgdata/WiMiUS20170518-5.tar.gz", 
@@ -236,13 +246,13 @@ public class Fixture {
             "target/test-classes/output/20170518.gpx",
             "target/test-classes/ini/AdjustTime.20170518.B1.ini",
             new Expecter[] {
-                new Expecter("cameradata/20170518_092031A.jpg", false, null, 90.0D, 180.0D, null),
-                new Expecter("cameradata/20170518_094226A_snap.jpg", true, "2017:05:18 09:42:26", 35.4366860000D, 139.4082650000D, null),
-                new Expecter("cameradata/20170518_094737A.jpg", true, "2017:05:18 09:47:36", 35.4368200000D, 139.4082810000D, "813/10 (81.3)"),
-                new Expecter("cameradata/20170518_094827A.jpg", false, null, 90.0D, 180.0D, null),
+                new Expecter("cameradata/20170518_092031A.jpg", false, null, 90.0D, 180.0D, null, null),
+                new Expecter("cameradata/20170518_094226A_snap.jpg", true, "2017:05:18 09:42:26", 35.4366860000D, 139.4082650000D, null, "0"),
+                new Expecter("cameradata/20170518_094737A.jpg", true, "2017:05:18 09:47:36", 35.4368200000D, 139.4082810000D, "813/10 (81.3)", "7/10 (0.7)"),
+                new Expecter("cameradata/20170518_094827A.jpg", false, null, 90.0D, 180.0D, null, null),
             }
         ),
-        // datas[3]
+        // datas[3] speed=off
         new Fixture(
             "[B2].WiMiUSカメラの場合.FILE_UPDATE時間を基準にして時間外のファイルもコピーする時",
             "target/test-classes/imgdata/WiMiUS20170518-5.tar.gz", 
@@ -250,10 +260,10 @@ public class Fixture {
             "target/test-classes/cameradata/20170518.gpx",
             "target/test-classes/ini/AdjustTime.20170518.B2.ini",
             new Expecter[] {
-                new Expecter("cameradata/20170518_092031A.jpg", false, "2017:05:18 09:20:30", 90.0D, 180.0D, null),
-                new Expecter("cameradata/20170518_094226A_snap.jpg", true, "2017:05:18 09:42:26", 35.4366860000D, 139.4082650000D, null),
-                new Expecter("cameradata/20170518_094737A.jpg", true, "2017:05:18 09:47:36", 35.4368200000D, 139.4082810000D, "813/10 (81.3)"),
-                new Expecter("cameradata/20170518_094827A.jpg", false, "2017:05:18 09:48:26", 90.0D, 180.0D, null),
+                new Expecter("cameradata/20170518_092031A.jpg", false, "2017:05:18 09:20:30", 90.0D, 180.0D, null, null),
+                new Expecter("cameradata/20170518_094226A_snap.jpg", true, "2017:05:18 09:42:26", 35.4366860000D, 139.4082650000D, null, "0"),
+                new Expecter("cameradata/20170518_094737A.jpg", true, "2017:05:18 09:47:36", 35.4368200000D, 139.4082810000D, "813/10 (81.3)", "7/10 (0.7)"),
+                new Expecter("cameradata/20170518_094827A.jpg", false, "2017:05:18 09:48:26", 90.0D, 180.0D, null, null),
             }
         ),
         /*

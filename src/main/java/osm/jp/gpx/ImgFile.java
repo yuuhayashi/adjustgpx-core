@@ -136,19 +136,18 @@ public class ImgFile extends File {
                     if (params.isGpxOverwriteMagvar()) {
                     	trkptT.magvarStr = imapoint.complementationMagvar(prepoint);
                     }
-
-                    // 緯度・経度と時間差から速度(km/h)を求める
-                    if (params.isGpxOutputSpeed()) {
-						double speed = imapoint.complementationSpeed(prepoint, preImg.imgtime.getTime());
-						trkptT.speedStr = String.format("%.1f", speed);
-                    }
                 }
                 if (trkptT.magvarStr != null) {
                 	magvarStr = trkptT.magvarStr;
                 }
                 
-                if (trkptT.speedStr != null) {
-                	speedStr = trkptT.speedStr;
+                // 緯度・経度と時間差から速度(km/h)を求める
+                if (params.isGpxOutputSpeed()) {
+					double speed = imapoint.complementationSpeed(prepoint, (imgtime.getTime() - preImg.imgtime.getTime()));
+					trkptT.setSpeed(speed);
+                }
+                if (trkptT.getSpeed() != null) {
+                	speedStr = trkptT.getSpeed();
                 }
             }
         }
@@ -261,6 +260,13 @@ public class ImgFile extends File {
                 final double magvar = Double.parseDouble(trkptT.magvarStr);
                 gpsDir.removeField(GpsTagConstants.GPS_TAG_GPS_IMG_DIRECTION);
                 gpsDir.add(GpsTagConstants.GPS_TAG_GPS_IMG_DIRECTION, RationalNumber.valueOf(magvar));
+            }
+
+            //---- EXIF GPS speed/GPS_TAG_GPS_SPEED ----
+            if (trkptT.getSpeed() != null) {
+                final double speed = Double.parseDouble(trkptT.getSpeed());
+                gpsDir.removeField(GpsTagConstants.GPS_TAG_GPS_SPEED);
+                gpsDir.add(GpsTagConstants.GPS_TAG_GPS_SPEED, RationalNumber.valueOf(speed));
             }
 
             //---- EXIF GPS_ ----
