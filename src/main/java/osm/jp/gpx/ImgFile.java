@@ -171,27 +171,8 @@ public class ImgFile extends File {
         	this.setEnable(false);
         }
         else {
-            if (params.isImgOutputExif()) {
-            	// EXIF出力
-                exifWrite(this, gpstime, trkptT, outDir);
-            }
-            else {
-                // EXIFの変換を伴わない単純なファイルコピー
-                FileInputStream sStream = new FileInputStream(this);
-                FileInputStream dStream = new FileInputStream(new File(outDir, this.getName()));
-                FileChannel srcChannel = sStream.getChannel();
-                FileChannel destChannel = dStream.getChannel();
-                try {
-                    srcChannel.transferTo(0, srcChannel.size(), destChannel);
-                	this.setEnable(true);
-                }
-                finally {
-                    srcChannel.close();
-                    destChannel.close();
-                    sStream.close();
-                    dStream.close();
-                }
-            }
+        	// EXIF出力
+            exifWrite(this, gpstime, trkptT, outDir);
         }
     }
     

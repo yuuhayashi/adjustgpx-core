@@ -41,10 +41,10 @@ public class AppParameters extends Properties {
     public static String IMG_OUTPUT_FOLDER = "IMG.OUTPUT_FOLDER";
 
     // 出力IMG: IMG出力をする  {ON | OFF}
-    public static String IMG_OUTPUT = "IMG.OUTPUT";
+    //public static String IMG_OUTPUT = "IMG.OUTPUT";
 
     // 出力IMG: EXIFを変換する
-    public static String IMG_OUTPUT_EXIF = "IMG.OUTPUT_EXIF";
+    //public static String IMG_OUTPUT_EXIF = "IMG.OUTPUT_EXIF";
 
     // 出力GPX: <SPEED>を上書き出力する {ON | OFF}
     public static String GPX_OUTPUT_SPEED = "GPX.OUTPUT_SPEED";
@@ -131,15 +131,6 @@ public class AppParameters extends Properties {
             valueStr = String.valueOf(true);
         }
         this.setProperty(IMG_OUTPUT, String.valueOf(valueStr));
-
-        //------------------------------------------------
-        // IMG出力: EXIFを変換する
-        valueStr = this.getProperty(IMG_OUTPUT_EXIF);
-        if (valueStr == null) {
-            update = true;
-            valueStr = String.valueOf(true);
-        }
-        this.setProperty(IMG_OUTPUT_EXIF, String.valueOf(valueStr));
 
         //------------------------------------------------
         // GPX出力: 時間的に間隔が開いたGPXログを別の<trkseg>セグメントに分割する。 {ON | OFF}
@@ -239,7 +230,6 @@ public class AppParameters extends Properties {
         System.out.println(" - param： "+ AppParameters.IMG_SOURCE_FOLDER +"="+ getProperty(AppParameters.IMG_SOURCE_FOLDER) );
         System.out.println(" - param： "+ AppParameters.IMG_OUTPUT_FOLDER +"="+ getProperty(AppParameters.IMG_OUTPUT_FOLDER) );
         System.out.println(" - param： "+ AppParameters.IMG_OUTPUT +"="+ getProperty(AppParameters.IMG_OUTPUT));     
-        System.out.println(" - param： "+ AppParameters.IMG_OUTPUT_EXIF +"= "+ isImgOutputExif());
         System.out.println(" - param： "+ AppParameters.GPX_SOURCE_FOLDER +"="+ getProperty(AppParameters.GPX_SOURCE_FOLDER));
         System.out.println(" - param： "+ AppParameters.GPX_OVERWRITE_MAGVAR +"="+ getProperty(AppParameters.GPX_OVERWRITE_MAGVAR));
         System.out.println(" - param： "+ AppParameters.GPX_OUTPUT_SPEED +"="+ getProperty(AppParameters.GPX_OUTPUT_SPEED));
@@ -269,14 +259,6 @@ public class AppParameters extends Properties {
     	return false;
     }
 
-    public boolean isImgOutputExif() {
-    	String valueStr = getProperty(AppParameters.IMG_OUTPUT_EXIF);
-    	if ((valueStr != null) && valueStr.equals(Boolean.toString(true))) {
-    		return true;
-    	}
-    	return false;
-    }
-    
     /**
      * AppParameters.IMG_SOURCE_FOLDER
      * @return new Path(getProperty(AppParameters.IMG_SOURCE_FOLDER));

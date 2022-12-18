@@ -71,12 +71,12 @@ exp) java -jar AdjustGpx.jar list.csv . IMG_01234.JPG 2012-06-15T12:52:22 鎌倉
 | GPX.noFirstNode   | true         | GPX: <trkseg>セグメントの最初の１ノードは無視する。(最初のノードはゴミデータになっていることが多いため) |
 | GPX.OVERWRITE_MAGVAR | true      | ソース画像のEXIFにあるMAGVARを無視して新たに書き換える |
 | GPX.gpxSplit      | true         |  GPX: 時間的に間隔が開いたGPXログを別の<trkseg>セグメントに分割する。 {ON | OFF}  |
-| IMG.OUTPUT_EXIF   | true         | 出力IMG: EXIFを変換する    |
-| IMG.OUTPUT        | true         | IMG出力をする  {ON | OFF}    |
+| IMG.OUTPUT_EXIF   | true         | [廃止] 出力IMG: EXIFを変換する    |
+| IMG.OUTPUT        | true         | [廃止] IMG出力をする  {ON | OFF}    |
 | GPX.OUTPUT_SPEED  | true         | 出力GPX: <SPEED>を上書き出力する {ON | OFF}    |
 | GPX.OUTPUT_WPT    | true         | ?    |
 | GPX.REUSE         | true         | ? |
-| SIMPLIFY_METERS   | 0.0          | simplify distance (m)  |
+| IMG.SIMPLIFY_METERS | 0.0          | simplify distance (m)  |
 
 
 
