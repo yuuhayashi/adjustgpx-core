@@ -55,7 +55,7 @@ public class AppParameters extends Properties {
     public static String GPX_REUSE = "GPX.REUSE";
 
     // simplify distance (m) 
-    public static String SIMPLIFY_METERS = "0.0";
+    public static String SIMPLIFY_METERS = "IMG.SIMPLIFY_METERS";
     
     //public boolean param_ImgOutputAll = false;
     //public boolean exif = false;
