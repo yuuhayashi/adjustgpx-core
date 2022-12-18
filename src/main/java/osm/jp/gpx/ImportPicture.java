@@ -110,21 +110,17 @@ public class ImportPicture extends Thread {
         
         // 出力ファイル
         // AppParameters.IMG_OUTPUT に置き換え
-        if (params.isImgOutput()) {
-            Path outDir = Paths.get(params.getProperty(AppParameters.IMG_OUTPUT_FOLDER));
-            if (!Files.exists(outDir)) {
-            	// 出力ディレクトリが存在しないときは作成する
-            	Files.createDirectories(outDir);
-            }
-            else if (!Files.isDirectory(outDir)) {
-            	// 出力ディレクトリがFILEのときはERROR
-            	throw new FileNotFoundException(String.format("OUTPUT directory '%s' is a File!", outDir.toAbsolutePath().toString()));
-            }
-            outDir = Paths.get(outDir.toAbsolutePath().toString(), imgFolder.getImgDir().getFileName().toString());
-            //File f = new File(outDir.toFile(), imgFolder.getImgDir().toFile().getName());
-            //outDir = f.toPath();
-            imgFolder.setOutDir(outDir);
+        Path outDir = Paths.get(params.getProperty(AppParameters.IMG_OUTPUT_FOLDER));
+        if (!Files.exists(outDir)) {
+        	// 出力ディレクトリが存在しないときは作成する
+        	Files.createDirectories(outDir);
         }
+        else if (!Files.isDirectory(outDir)) {
+        	// 出力ディレクトリがFILEのときはERROR
+        	throw new FileNotFoundException(String.format("OUTPUT directory '%s' is a File!", outDir.toAbsolutePath().toString()));
+        }
+        outDir = Paths.get(outDir.toAbsolutePath().toString(), imgFolder.getImgDir().getFileName().toString());
+        imgFolder.setOutDir(outDir);
 
         this.start();
         try {

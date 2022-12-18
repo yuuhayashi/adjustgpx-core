@@ -75,7 +75,7 @@ exp) java -jar AdjustGpx.jar list.csv . IMG_01234.JPG 2012-06-15T12:52:22 鎌倉
 | IMG.OUTPUT        | true         | [廃止] IMG出力をする  {ON | OFF}    |
 | GPX.OUTPUT_SPEED  | true         | 出力GPX: <SPEED>を上書き出力する {ON | OFF}    |
 | GPX.OUTPUT_WPT    | true         | ?    |
-| GPX.REUSE         | true         | ? |
+| GPX.REUSE         | true         | ON にすると、"*_.GPX" ファイルもGPXの対象とする |
 | IMG.SIMPLIFY_METERS | 0.0          | simplify distance (m)  |
 
 

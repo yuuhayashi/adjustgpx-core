@@ -124,15 +124,6 @@ public class AppParameters extends Properties {
         }
 
         //------------------------------------------------
-        // IMG出力: IMGを出力する
-        valueStr = this.getProperty(IMG_OUTPUT);
-        if (valueStr == null) {
-            update = true;
-            valueStr = String.valueOf(true);
-        }
-        this.setProperty(IMG_OUTPUT, String.valueOf(valueStr));
-
-        //------------------------------------------------
         // GPX出力: 時間的に間隔が開いたGPXログを別の<trkseg>セグメントに分割する。 {ON | OFF}
         valueStr = this.getProperty(GPX_GPXSPLIT);
         if (valueStr == null) {
@@ -229,7 +220,6 @@ public class AppParameters extends Properties {
         System.out.println(" - param： "+ AppParameters.GPX_BASETIME +"="+ getProperty(AppParameters.GPX_BASETIME) );
         System.out.println(" - param： "+ AppParameters.IMG_SOURCE_FOLDER +"="+ getProperty(AppParameters.IMG_SOURCE_FOLDER) );
         System.out.println(" - param： "+ AppParameters.IMG_OUTPUT_FOLDER +"="+ getProperty(AppParameters.IMG_OUTPUT_FOLDER) );
-        System.out.println(" - param： "+ AppParameters.IMG_OUTPUT +"="+ getProperty(AppParameters.IMG_OUTPUT));     
         System.out.println(" - param： "+ AppParameters.GPX_SOURCE_FOLDER +"="+ getProperty(AppParameters.GPX_SOURCE_FOLDER));
         System.out.println(" - param： "+ AppParameters.GPX_OVERWRITE_MAGVAR +"="+ getProperty(AppParameters.GPX_OVERWRITE_MAGVAR));
         System.out.println(" - param： "+ AppParameters.GPX_OUTPUT_SPEED +"="+ getProperty(AppParameters.GPX_OUTPUT_SPEED));
@@ -247,18 +237,6 @@ public class AppParameters extends Properties {
     	return (getProperty(AppParameters.GPX_BASETIME).equals("EXIF_TIME"));
     }
     
-    /**
-     * IMG出力: IMGを出力する
-     * @return
-     */
-    public boolean isImgOutput() {
-    	String valueStr = getProperty(AppParameters.IMG_OUTPUT);
-    	if ((valueStr != null) && valueStr.equals(Boolean.toString(true))) {
-    		return true;
-    	}
-    	return false;
-    }
-
     /**
      * AppParameters.IMG_SOURCE_FOLDER
      * @return new Path(getProperty(AppParameters.IMG_SOURCE_FOLDER));
