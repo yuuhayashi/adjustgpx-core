@@ -2,12 +2,12 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>osm.surveyor</groupId>
   <artifactId>adjustgpx-core</artifactId>
-  <version>5.3.21</version>
+  <version>5.3.22-SNAPSHOT</version>
   <scm>
     <connection>scm:https://github.com/yuuhayashi/adjustgpx-core.git</connection>
     <url>https://github.com/yuuhayashi/adjustgpx-core/wiki</url>
     <developerConnection>scm:git:https://github.com/yuuhayashi/adjustgpx-core.git</developerConnection>
-    <tag>v5.3.21</tag>
+    <tag>v5.3.17</tag>
   </scm>
     
   <properties>
