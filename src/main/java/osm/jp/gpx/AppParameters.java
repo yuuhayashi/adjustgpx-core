@@ -40,28 +40,18 @@ public class AppParameters extends Properties {
     // 出力フォルダ:(変換した画像ファイルを出力するフォルダ)
     public static String IMG_OUTPUT_FOLDER = "IMG.OUTPUT_FOLDER";
 
-    // 出力IMG: IMG出力をする  {ON | OFF}
-    //public static String IMG_OUTPUT = "IMG.OUTPUT";
-
-    // 出力IMG: EXIFを変換する
-    //public static String IMG_OUTPUT_EXIF = "IMG.OUTPUT_EXIF";
-
     // 出力GPX: <SPEED>を上書き出力する {ON | OFF}
     public static String GPX_OUTPUT_SPEED = "GPX.OUTPUT_SPEED";
 
     // 出力GPX: ソースGPXの<MAGVER>を無視する {ON | OFF}
     public static String GPX_OVERWRITE_MAGVAR = "GPX.OVERWRITE_MAGVAR";
     
+    // "*_.GPX"も対象にする
     public static String GPX_REUSE = "GPX.REUSE";
 
     // simplify distance (m) 
     public static String SIMPLIFY_METERS = "IMG.SIMPLIFY_METERS";
     
-    //public boolean param_ImgOutputAll = false;
-    //public boolean exif = false;
-    //public boolean param_GpxSplit = false;
-    //public boolean param_GpxReuse = false;
-
     Path file;
 
     public AppParameters() throws FileNotFoundException, IOException, URISyntaxException {
